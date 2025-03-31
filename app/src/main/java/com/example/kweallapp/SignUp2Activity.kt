@@ -3,23 +3,36 @@ package com.example.kweallapp
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import com.example.kweallapp.databinding.SignUp1Binding
 import com.example.kweallapp.databinding.SignUp2Binding
+import com.example.kweallapp.viewmodel.SignUpViewModel
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.util.TextUtils
 import java.util.Calendar
 
 class SignUp2Activity : BaseActivity() {
 
     private lateinit var binding: SignUp2Binding
+    private lateinit var viewModel: SignUpViewModel
     private var isFormSubmitted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SignUp2Binding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val myApp = application as MyApp
+        val userDao = myApp.database.userDao()
+
+//        viewModel = ViewModelProvider(
+//            this,
+//            SignUpViewModel.SignUpViewModelFactory(userDao)
+//        )[SignUpViewModel::class.java]
+        viewModel = SignUpViewModel.getInstance(userDao)
 
         binding.buttonContinue.setOnClickListener {
             startActivity(Intent(this, SignUp3Activity::class.java))
@@ -135,9 +148,22 @@ class SignUp2Activity : BaseActivity() {
         binding.buttonContinue.setOnClickListener {
             isFormSubmitted = true
             if (validateForm()) {
+                saveDataToViewModel()
                 startActivity(Intent(this, SignUp3Activity::class.java))
             }
         }
+    }
+
+    private fun saveDataToViewModel() {
+        viewModel.firstName = binding.editText1.text.toString().trim()
+        viewModel.lastName = binding.editText.text.toString().trim()
+        viewModel.birthDate = binding.editText3.text.toString().trim()
+
+        Log.d("SignUp1Activity", "Email saved to ViewModel: ${viewModel.email}")
+        Log.d("SignUp1Activity", "Password saved to ViewModel: ${viewModel.password}")
+        Log.d("SignUp1Activity", "firstName saved to ViewModel: ${viewModel.firstName}")
+        Log.d("SignUp1Activity", "LastName saved to ViewModel: ${viewModel.lastName}")
+        Log.d("SignUp1Activity", "birthDate saved to ViewModel: ${viewModel.birthDate}")
     }
 
     private fun isValidDate(date: String): Boolean {

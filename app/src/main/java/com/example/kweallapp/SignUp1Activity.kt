@@ -4,16 +4,25 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
+import android.util.Patterns
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import com.example.kweallapp.databinding.SignUp1Binding
+import com.example.kweallapp.utils.PasswordHashingUtils
+import com.example.kweallapp.viewmodel.SignUpViewModel
+import java.util.Date
 
 class SignUp1Activity : BaseActivity() {
 
     private lateinit var binding: SignUp1Binding
+    private lateinit var viewModel: SignUpViewModel
     private var isFormSubmitted = false
     private var isPasswordVisible = false
 
@@ -21,6 +30,17 @@ class SignUp1Activity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = SignUp1Binding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Получаем доступ к базе данных через MyApp
+        val myApp = application as MyApp
+        val userDao = myApp.database.userDao()
+
+        // Создаем ViewModel с помощью фабрики
+//        viewModel = ViewModelProvider(
+//            this,
+//            SignUpViewModel.SignUpViewModelFactory(userDao)
+//        )[SignUpViewModel::class.java]
+        viewModel = SignUpViewModel.getInstance(userDao)
 
         updatePasswordField(binding.editText1, isPasswordVisible)
         updatePasswordField(binding.editText2, isPasswordVisible)
@@ -57,13 +77,13 @@ class SignUp1Activity : BaseActivity() {
         updatePasswordField(binding.editText2, isPasswordVisible)
     }
 
-    private fun updatePasswordField(editText: android.widget.EditText, isVisible: Boolean) {
+    private fun updatePasswordField(editText: EditText, isVisible: Boolean) {
         val selection = editText.selectionEnd
 
         editText.inputType = if (isVisible) {
-            android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         } else {
-            android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
 
         editText.typeface = Typeface.DEFAULT
@@ -95,7 +115,7 @@ class SignUp1Activity : BaseActivity() {
 
     private fun validateEmail(): Boolean {
         val email = binding.editText.text.toString()
-        val pattern = android.util.Patterns.EMAIL_ADDRESS
+        val pattern = Patterns.EMAIL_ADDRESS
         val isValid = pattern.matcher(email).matches()
 
         if (email.isEmpty()) {
@@ -175,8 +195,25 @@ class SignUp1Activity : BaseActivity() {
         binding.buttonContinue.setOnClickListener {
             isFormSubmitted = true
             if (validateForm()) {
+                saveDataToViewModel()
                 startActivity(Intent(this, SignUp2Activity::class.java))
             }
         }
+    }
+
+    private fun saveDataToViewModel() {
+        Log.d("SignUp1Activity", "ВЫЗВАЛИ СОХРАНЕНИЕ")
+        val email = binding.editText.text.toString().trim()
+        val password = binding.editText1.text.toString().trim()
+
+        viewModel.email = email
+        viewModel.password = PasswordHashingUtils.hashPassword(password)
+
+        Log.d("SignUp1Activity", "Email saved to ViewModel: $email")
+        Log.d("SignUp1Activity", "Password saved to ViewModel: $password")
+    }
+
+    private fun showToast(message: String) {
+        android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_LONG).show()
     }
 }

@@ -24,9 +24,9 @@ class ResultsFragment : Fragment(R.layout.fragment_results) {
 
         // Подготовка данных
         val carList = listOf(
-            Car("S 500 Sedan", "Mercedes-Benz", "2500₽", "А/Т", "Бензин", R.drawable.ic_car),
-            Car("X7", "BMW", "3000₽", "А/Т", "Бензин", R.drawable.ic_car),
-            Car("Q8", "Audi", "2800₽", "А/Т", "Бензин", R.drawable.ic_car)
+            Car(1,"S 500 Sedan", "Mercedes-Benz", 2500, "А/Т", "Бензин", R.drawable.ic_car),
+            Car(2, "X7", "BMW", 3000, "А/Т", "Бензин", R.drawable.ic_car),
+            Car(3, "Q8", "Audi", 2800, "А/Т", "Бензин", R.drawable.ic_car)
         )
 
         // Настройка адаптера

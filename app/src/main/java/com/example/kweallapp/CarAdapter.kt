@@ -35,10 +35,10 @@ class CarAdapter(private val carList: List<Car>) : RecyclerView.Adapter<CarAdapt
     override fun onBindViewHolder(holder: CarViewHolder, position: Int) {
         // Привязка данных к виджетам
         val car = carList[position]
-        holder.carImage.setImageResource(car.imageResId)
+        holder.carImage.setImageResource(car.image)
         holder.carModel.text = car.model
         holder.carBrand.text = car.brand
-        holder.carPrice.text = car.pricePerDay
+        holder.carPrice.text = car.pricePerDay.toString()
         holder.dailyPrice.text = "в день"
 //        holder.transmissionText.text = car.transmission
 //        holder.fuelText.text = car.fuelType

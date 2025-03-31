@@ -19,8 +19,12 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
 import android.widget.TextView
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.kweallapp.viewmodel.SignUpViewModel
 
 private const val REQUEST_CODE_GALLERY = 100
 private const val REQUEST_CODE_CAMERA = 200
@@ -30,14 +34,26 @@ private const val REQUEST_CODE_PHOTO_2 = 400
 class SignUp3Activity : BaseActivity() {
 
     private lateinit var binding: SignUp3Binding
+    private lateinit var viewModel: SignUpViewModel
     private var isFormSubmitted = false
     private var isPhoto1Loaded = false
     private var isPhoto2Loaded = false
+    private var avatarBitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SignUp3Binding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Получаем доступ к базе данных через MyApp
+        val myApp = application as MyApp
+        val userDao = myApp.database.userDao()
+
+//        viewModel = ViewModelProvider(
+//            this,
+//            SignUpViewModel.SignUpViewModelFactory(userDao)
+//        )[SignUpViewModel::class.java]
+        viewModel = SignUpViewModel.getInstance(userDao)
 
         binding.buttonContinue.isEnabled = false
 
@@ -46,6 +62,11 @@ class SignUp3Activity : BaseActivity() {
         }
 
         binding.buttonContinue.setOnClickListener {
+            isFormSubmitted = true
+            if (validateForm()) {
+                saveDataToViewModel()
+                saveUserToDatabase()
+            }
             startActivity(Intent(this, CongratulationsActivity::class.java))
         }
 
@@ -317,11 +338,43 @@ class SignUp3Activity : BaseActivity() {
         return true
     }
 
+    private fun saveUserToDatabase() {
+        lifecycleScope.launchWhenStarted {
+            try {
+                Log.d("SignUp3Activity", "Starting to save user data to database...")
+                viewModel.saveUserToDatabase()
+                Log.d("SignUp3Activity", "User data saved successfully!")
+                Toast.makeText(this@SignUp3Activity, "Регистрация завершена!", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this@SignUp3Activity, CongratulationsActivity::class.java))
+                finish()
+            } catch (e: Exception) {
+                Log.e("SignUp3Activity", "Error saving user data: ${e.message}")
+                Toast.makeText(this@SignUp3Activity, "Ошибка при сохранении данных", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun saveDataToViewModel() {
+        viewModel.driverLicenseNumber = binding.editText.text.toString().trim()
+        viewModel.driverLicenseIssueDate = binding.editText3.text.toString().trim()
+        viewModel.avatar = avatarBitmap?.toString() ?: ""
+
+        Log.d("SignUp3Activity", "Email saved to ViewModel: ${viewModel.email}")
+        Log.d("SignUp3Activity", "Password saved to ViewModel: ${viewModel.password}")
+        Log.d("SignUp3Activity", "firstName saved to ViewModel: ${viewModel.firstName}")
+        Log.d("SignUp3Activity", "LastName saved to ViewModel: ${viewModel.lastName}")
+        Log.d("SignUp3Activity", "birthDate saved to ViewModel: ${viewModel.birthDate}")
+        Log.d("SignUp3Activity", "driverLicenseNumber saved to ViewModel: ${viewModel.driverLicenseNumber}")
+        Log.d("SignUp3Activity", "driverLicenseIssueDate saved to ViewModel: ${viewModel.driverLicenseIssueDate}")
+        Log.d("SignUp3Activity", "avatar saved to ViewModel: ${viewModel.avatar}")
+    }
 
     private fun setupButton() {
         binding.buttonContinue.setOnClickListener {
             isFormSubmitted = true
             if (validateForm()) {
+                saveDataToViewModel()
+                saveUserToDatabase()
                 startActivity(Intent(this, CongratulationsActivity::class.java))
             }
         }
