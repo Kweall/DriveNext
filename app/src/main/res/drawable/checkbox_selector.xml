@@ -1,0 +1,7 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Изображение для состояния "checked" -->
+    <item android:drawable="@drawable/ic_full_box" android:state_checked="true" />
+
+    <!-- Изображение для состояния "unchecked" -->
+    <item android:drawable="@drawable/ic_empty_box" android:state_checked="false" />
+</selector>
