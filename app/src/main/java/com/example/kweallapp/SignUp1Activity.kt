@@ -14,9 +14,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.kweallapp.databinding.SignUp1Binding
 import com.example.kweallapp.utils.PasswordHashingUtils
 import com.example.kweallapp.viewmodel.SignUpViewModel
+import kotlinx.coroutines.launch
 import java.util.Date
 
 class SignUp1Activity : BaseActivity() {
@@ -90,7 +92,7 @@ class SignUp1Activity : BaseActivity() {
         editText.setSelection(selection)
     }
 
-    private fun validateForm(): Boolean {
+    private suspend fun validateForm(): Boolean {
         isFormSubmitted = true
 
         if (!validateEmail()) {
@@ -113,7 +115,7 @@ class SignUp1Activity : BaseActivity() {
         return true
     }
 
-    private fun validateEmail(): Boolean {
+    private suspend fun validateEmail(): Boolean {
         val email = binding.editText.text.toString()
         val pattern = Patterns.EMAIL_ADDRESS
         val isValid = pattern.matcher(email).matches()
@@ -136,6 +138,16 @@ class SignUp1Activity : BaseActivity() {
             return false
         }
 
+        // Проверяем, существует ли пользователь с таким email
+        val userExists = viewModel.checkIfUserExists(email)
+        if (userExists) {
+            Toast.makeText(
+                this,
+                getString(R.string.error_email_already_used),
+                Toast.LENGTH_LONG
+            ).show()
+            return false
+        }
         binding.editText.error = null
         return true
     }
@@ -193,10 +205,19 @@ class SignUp1Activity : BaseActivity() {
 
     private fun setupButton() {
         binding.buttonContinue.setOnClickListener {
-            isFormSubmitted = true
-            if (validateForm()) {
-                saveDataToViewModel()
-                startActivity(Intent(this, SignUp2Activity::class.java))
+            lifecycleScope.launch {
+                if (validateForm()) {
+                    if (binding.checkBox.isChecked) {
+                        saveDataToViewModel()
+                        startActivity(Intent(this@SignUp1Activity, SignUp2Activity::class.java))
+                    } else {
+                        Toast.makeText(
+                            this@SignUp1Activity,
+                            getString(R.string.error_agree_terms),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
             }
         }
     }

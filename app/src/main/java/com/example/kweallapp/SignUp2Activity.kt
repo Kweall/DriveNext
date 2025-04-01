@@ -155,9 +155,17 @@ class SignUp2Activity : BaseActivity() {
     }
 
     private fun saveDataToViewModel() {
+        val selectedGender = when (binding.radioGroupGender.checkedRadioButtonId) {
+            R.id.radioButtonMale -> getString(R.string.text_man)
+            R.id.radioButtonFemale -> getString(R.string.text_woman)
+            else -> null // Если ни один из RadioButton не выбран
+        }
         viewModel.firstName = binding.editText1.text.toString().trim()
         viewModel.lastName = binding.editText.text.toString().trim()
+        viewModel.patronymicName = binding.editText2.text.toString().trim()
         viewModel.birthDate = binding.editText3.text.toString().trim()
+        viewModel.gender = selectedGender ?: ""
+        viewModel.gmail = getString(R.string.null_gmail)
 
         Log.d("SignUp1Activity", "Email saved to ViewModel: ${viewModel.email}")
         Log.d("SignUp1Activity", "Password saved to ViewModel: ${viewModel.password}")

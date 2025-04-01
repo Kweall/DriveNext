@@ -20,7 +20,7 @@ class SplashScreenActivity : BaseActivity() {
                 val isOnboardingShown = sharedPreferences.getBoolean("is_onboarding_shown", false)
 
                 val intent = if (isOnboardingShown) {
-                    Intent(this, TestActivity::class.java)
+                    Intent(this, LoginActivity::class.java)
                 } else {
                     sharedPreferences.edit().putBoolean("is_onboarding_shown", true).apply()
                     Intent(this, Onboarding1Activity::class.java)

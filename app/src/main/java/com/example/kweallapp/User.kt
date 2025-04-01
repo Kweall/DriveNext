@@ -12,6 +12,7 @@ data class User(
     val passwordHash: String,
     val firstName: String,
     val lastName: String,
+    val patronymicName: String,
     val birthDate: String,
     val gender: String,
     val driverLicenseNumber: String,
@@ -20,5 +21,6 @@ data class User(
     val avatar: String, // Путь к аватарке
     val middleName: String = "", // Используйте пустую строку
     val driverLicensePhoto: String = "", // Используйте пустую строку
-    val passportPhoto: String = "" // Используйте пустую строку
+    val passportPhoto: String = "", // Используйте пустую строку
+    val gmail: String = ""
 )

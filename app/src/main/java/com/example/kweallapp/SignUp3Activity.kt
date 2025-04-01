@@ -25,6 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.kweallapp.viewmodel.SignUpViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 private const val REQUEST_CODE_GALLERY = 100
 private const val REQUEST_CODE_CAMERA = 200
@@ -358,6 +361,9 @@ class SignUp3Activity : BaseActivity() {
         viewModel.driverLicenseNumber = binding.editText.text.toString().trim()
         viewModel.driverLicenseIssueDate = binding.editText3.text.toString().trim()
         viewModel.avatar = avatarBitmap?.toString() ?: ""
+        viewModel.driverLicensePhoto = binding.textView9.text.toString().trim()
+        viewModel.passportPhoto = binding.textView10.text.toString().trim()
+        viewModel.registrationDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
 
         Log.d("SignUp3Activity", "Email saved to ViewModel: ${viewModel.email}")
         Log.d("SignUp3Activity", "Password saved to ViewModel: ${viewModel.password}")

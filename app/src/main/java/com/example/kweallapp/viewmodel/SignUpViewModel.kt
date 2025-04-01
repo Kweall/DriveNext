@@ -11,13 +11,16 @@ class SignUpViewModel(private val userDao: UserDao) : ViewModel() {
     var password: String = ""
     var firstName: String = ""
     var lastName: String = ""
-    var middleName: String = ""
+    var patronymicName: String = ""
     var birthDate: String = ""
     var gender: String = ""
     var driverLicenseNumber: String = ""
     var driverLicenseIssueDate: String = ""
     var avatar: String = "" // Путь к аватарке
     var registrationDate: String = ""
+    var driverLicensePhoto: String = ""
+    var passportPhoto: String = ""
+    var gmail: String = ""
 
     companion object {
         @Volatile
@@ -36,16 +39,24 @@ class SignUpViewModel(private val userDao: UserDao) : ViewModel() {
             passwordHash = password,
             firstName = firstName,
             lastName = lastName,
+            patronymicName = patronymicName,
             birthDate = birthDate,
             gender = gender,
             driverLicenseNumber = driverLicenseNumber,
             driverLicenseIssueDate = driverLicenseIssueDate,
-            registrationDate = System.currentTimeMillis().toString(),
-            avatar = avatar
+            registrationDate = registrationDate,
+            avatar = avatar,
+            driverLicensePhoto = driverLicensePhoto,
+            passportPhoto = passportPhoto,
+            gmail = gmail
         )
         Log.d("SignUpViewModel", "Saving user to database: $user")
         userDao.insert(user)
         Log.d("SignUpViewModel", "User saved successfully")
+    }
+
+    suspend fun checkIfUserExists(email: String): Boolean {
+        return userDao.getUserByEmail(email) != null
     }
 
     class SignUpViewModelFactory(

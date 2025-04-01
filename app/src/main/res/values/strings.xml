@@ -71,6 +71,8 @@
     <string name="option_take_photo">Сделать фото</string>
     <string name="permissions_for_camera">Разрешения необходимы для работы с камерой и галереей</string>
     <string name="error_upload_photo">Пожалуйста, загрузите все необходимые фото</string>
+    <string name="error_email_already_used">Данный email уже используется</string>
+    <string name="null_gmail">Не указан</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text_enter_car_brand">Введите марку автомобиля</string>

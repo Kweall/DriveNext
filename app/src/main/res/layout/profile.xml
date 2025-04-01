@@ -62,9 +62,9 @@
 
 
     <TextView
-        android:id="@+id/textView111"
+        android:id="@+id/fullName"
         style="@style/TextAppearance.AppCompat.BoldText.Weight600Sp20"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_name_surname"
         android:gravity="center"
@@ -74,16 +74,16 @@
 
 
     <TextView
-        android:id="@+id/textView222"
+        android:id="@+id/registrationdate"
         style="@style/TextAppearance.AppCompat.BaseText.Weight400Sp14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:text="@string/string_registered_at"
-        app:layout_constraintEnd_toEndOf="@+id/textView111"
-        app:layout_constraintStart_toStartOf="@+id/textView111"
-        app:layout_constraintTop_toBottomOf="@+id/textView111" />
+        app:layout_constraintEnd_toEndOf="@+id/fullName"
+        app:layout_constraintStart_toStartOf="@+id/fullName"
+        app:layout_constraintTop_toBottomOf="@+id/fullName" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,7 +96,7 @@
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView222">
+        app:layout_constraintTop_toBottomOf="@+id/registrationdate">
 
         <!-- Внутренний контейнер для текста -->
         <LinearLayout
@@ -210,7 +210,7 @@
                 android:text="@string/text_sex"/>
 
             <TextView
-                android:id="@+id/email_text123"
+                android:id="@+id/gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.BaseText.Weight500Sp12"
@@ -258,7 +258,7 @@
                 android:text="@string/text_google"/>
 
             <TextView
-                android:id="@+id/email_text1234"
+                android:id="@+id/gmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.BaseText.Weight500Sp12"

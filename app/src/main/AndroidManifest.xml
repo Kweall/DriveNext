@@ -21,7 +21,7 @@
         android:theme="@style/Base.Theme.KweallApp">
 
         <activity
-            android:name=".Onboarding1Activity"
+            android:name=".SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +32,7 @@
         <activity android:name=".TestActivity"/>
         <activity android:name=".MainActivity"/>
         <activity android:name=".BaseActivity"/>
-<!--        <activity android:name=".Onboarding1Activity"/>-->
+        <activity android:name=".Onboarding1Activity"/>
         <activity android:name=".Onboarding2Activity"/>
         <activity android:name=".Onboarding3Activity"/>
         <activity android:name=".GettingStartedActivity"/>

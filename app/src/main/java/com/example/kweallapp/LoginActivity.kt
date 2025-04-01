@@ -52,6 +52,8 @@ class LoginActivity : BaseActivity() {
 
         userViewModel.loginUser(email, password,
             onSuccess = {
+                val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                sharedPreferences.edit().putString("current_user_email", email).apply()
                 Log.d("SignUp3Activity", "УСПЕХ ДАЛЬШЕ")
                 startActivity(
                     Intent(this, MainActivity::class.java).apply {
