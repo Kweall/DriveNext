@@ -3,6 +3,7 @@ package com.example.kweallapp
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -51,13 +52,19 @@ class LoginActivity : BaseActivity() {
 
         userViewModel.loginUser(email, password,
             onSuccess = {
-                startActivity(Intent(this, BaseActivity::class.java).apply {
-                    putExtra("USER_EMAIL", email)
-                })
+                Log.d("SignUp3Activity", "УСПЕХ ДАЛЬШЕ")
+                startActivity(
+                    Intent(this, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                )
+                Log.d("SignUp3Activity", "ЗАКАНЧИВАЕМ")
                 finish()
             },
-            onError = { errorMessage ->
+            onError = {
+                errorMessage ->
                 showError(errorMessage)
+                Log.d("SignUp3Activity", "ЭЭЭЭ ОШИБКА")
             }
         )
     }
