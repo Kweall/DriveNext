@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kweallapp.R
 
-class CarAdapter(private val carList: List<Car>) : RecyclerView.Adapter<CarAdapter.CarViewHolder>() {
+class CarAdapter(private var carList: List<Car>) : RecyclerView.Adapter<CarAdapter.CarViewHolder>() {
 
     // ViewHolder для хранения ссылок на виджеты
     class CarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,7 +27,6 @@ class CarAdapter(private val carList: List<Car>) : RecyclerView.Adapter<CarAdapt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
-        // Инфлейт макета item_car.xml
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_car, parent, false)
         return CarViewHolder(view)
     }
@@ -39,20 +38,20 @@ class CarAdapter(private val carList: List<Car>) : RecyclerView.Adapter<CarAdapt
         holder.carModel.text = car.model
         holder.carBrand.text = car.brand
         holder.carPrice.text = car.pricePerDay.toString()
-        holder.dailyPrice.text = "в день"
+        holder.dailyPrice.text = R.string.text_per_day.toString()
 //        holder.transmissionText.text = car.transmission
 //        holder.fuelText.text = car.fuelType
 
-        // Обработчики кнопок
         holder.bookButton.setOnClickListener {
-            // Действие при нажатии на "Забронировать"
+
         }
         holder.detailsButton.setOnClickListener {
-            // Действие при нажатии на "Детали"
+
         }
     }
 
     override fun getItemCount(): Int {
         return carList.size
     }
+
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import java.util.Locale
 
 object LocaleHelper {
-    fun setLocale(context: Context, languageCode: String?): Context {
+    fun setLocale(context: Context, languageCode: String): Context {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
 

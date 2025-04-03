@@ -12,10 +12,13 @@ class SearchingFragment : Fragment(R.layout.fragment_searching) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Имитация поиска (задержка 2 секунды)
+        // Получаем запрос из аргументов
+        val query = arguments?.getString("query") ?: ""
+
         Handler(Looper.getMainLooper()).postDelayed({
-            // Переход на экран результатов поиска
-            findNavController().navigate(R.id.action_searchingFragment_to_resultsFragment)
+            val bundle = Bundle()
+            bundle.putString("query", query)
+            findNavController().navigate(R.id.action_searchingFragment_to_resultsFragment, bundle)
         }, 2000)
     }
 }

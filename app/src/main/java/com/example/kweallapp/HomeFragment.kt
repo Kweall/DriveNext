@@ -5,49 +5,46 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var carAdapter: CarAdapter
     private lateinit var searchBar: TextInputEditText
+    private lateinit var database: AppDatabase
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Инфлейт макета fragment_home.xml
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        // Инициализация RecyclerView
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Подготовка данных
-        val carList = listOf(
-            Car(1,"S 500 Sedan", "Mercedes-Benz", 2500, "А/Т", "Бензин", R.drawable.ic_car),
-            Car(2, "X7", "BMW", 3000, "А/Т", "Бензин", R.drawable.ic_car),
-            Car(3, "Q8", "Audi", 2800, "А/Т", "Бензин", R.drawable.ic_car)
-        )
+        database = AppDatabase.getDatabase(requireContext())
 
-        // Настройка адаптера
-        carAdapter = CarAdapter(carList)
-        recyclerView.adapter = carAdapter
-
-        // Инициализация поисковой строки
-        searchBar = view.findViewById(R.id.search_bar)
-
-        // Обработка нажатия на кнопку "Поиск" (или клавиши Enter)
-        searchBar.setOnEditorActionListener { _, _, _ ->
-            // Переход на SearchingFragment
-            findNavController().navigate(R.id.action_homeFragment_to_searchingFragment)
-            true
+        // Получение данных из базы данных
+        lifecycleScope.launch {
+            val carList = database.carDao().getAllCars()
+            carAdapter = CarAdapter(carList)
+            recyclerView.adapter = carAdapter
         }
 
-        return view
+        searchBar = view.findViewById(R.id.search_bar)
+
+        searchBar.setOnEditorActionListener { _, _, _ ->
+            val query = searchBar.text.toString().trim()
+            if (query.isNotEmpty()) {
+                val bundle = Bundle()
+                bundle.putString("query", query)
+
+                findNavController().navigate(R.id.action_homeFragment_to_searchingFragment, bundle)
+            }
+            true
+        }
     }
 }

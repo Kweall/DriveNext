@@ -1,6 +1,7 @@
 package com.example.kweallapp
 
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -28,6 +29,10 @@ class ProfileFragment : Fragment() {
         // Загрузка данных пользователя
         loadUserData()
 
+        binding.customButton5.setOnClickListener {
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+        }
         return binding.root
     }
 
