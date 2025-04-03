@@ -84,7 +84,6 @@ class MyApp : Application() {
     }
 }
 
-// Создайте фабрику для ViewModel
 class UserViewModelFactory(private val userDao: UserDao) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserViewModel::class.java)) {

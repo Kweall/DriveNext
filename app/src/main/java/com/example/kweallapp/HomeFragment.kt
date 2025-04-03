@@ -27,7 +27,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         database = AppDatabase.getDatabase(requireContext())
 
-        // Получение данных из базы данных
         lifecycleScope.launch {
             val carList = database.carDao().getAllCars()
             carAdapter = CarAdapter(carList)

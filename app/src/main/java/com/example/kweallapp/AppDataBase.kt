@@ -9,7 +9,7 @@ import androidx.room.TypeConverters
 @Database(
     entities = [User::class, Car::class],
     version = 1,
-    exportSchema = false // Упрощаем при отсутствии миграций
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 

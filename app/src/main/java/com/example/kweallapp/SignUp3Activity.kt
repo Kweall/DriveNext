@@ -53,10 +53,6 @@ class SignUp3Activity : BaseActivity() {
         val myApp = application as MyApp
         val userDao = myApp.database.userDao()
 
-//        viewModel = ViewModelProvider(
-//            this,
-//            SignUpViewModel.SignUpViewModelFactory(userDao)
-//        )[SignUpViewModel::class.java]
         viewModel = SignUpViewModel.getInstance(userDao)
 
         binding.buttonContinue.isEnabled = false
@@ -342,7 +338,6 @@ class SignUp3Activity : BaseActivity() {
             return false
         }
 
-        // Проверка на уникальность номера водительского удостоверения
         val isDriverLicenseExists = viewModel.checkIfDriverLicenseExists(driverLicense)
         if (isDriverLicenseExists) {
             Toast.makeText(

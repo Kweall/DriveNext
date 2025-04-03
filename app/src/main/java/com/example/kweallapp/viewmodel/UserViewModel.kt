@@ -16,10 +16,8 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
-                // Получаем пользователя по email
                 val user = userDao.getUserByEmail(email)
                 if (user != null) {
-                    // Проверяем пароль с помощью PasswordHashingUtils
                     if (PasswordHashingUtils.verifyPassword(password, user.passwordHash)) {
                         onSuccess()
                     } else {
