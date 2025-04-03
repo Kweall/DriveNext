@@ -33,15 +33,9 @@ class SignUp1Activity : BaseActivity() {
         binding = SignUp1Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Получаем доступ к базе данных через MyApp
         val myApp = application as MyApp
         val userDao = myApp.database.userDao()
 
-        // Создаем ViewModel с помощью фабрики
-//        viewModel = ViewModelProvider(
-//            this,
-//            SignUpViewModel.SignUpViewModelFactory(userDao)
-//        )[SignUpViewModel::class.java]
         viewModel = SignUpViewModel.getInstance(userDao)
 
         updatePasswordField(binding.editText1, isPasswordVisible)
@@ -138,7 +132,6 @@ class SignUp1Activity : BaseActivity() {
             return false
         }
 
-        // Проверяем, существует ли пользователь с таким email
         val userExists = viewModel.checkIfUserExists(email)
         if (userExists) {
             Toast.makeText(

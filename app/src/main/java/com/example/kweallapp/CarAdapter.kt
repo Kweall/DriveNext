@@ -38,7 +38,7 @@ class CarAdapter(private var carList: List<Car>) : RecyclerView.Adapter<CarAdapt
         holder.carModel.text = car.model
         holder.carBrand.text = car.brand
         holder.carPrice.text = car.pricePerDay.toString()
-        holder.dailyPrice.text = R.string.text_per_day.toString()
+        holder.dailyPrice.text = holder.itemView.context.getString(R.string.text_per_day)
 //        holder.transmissionText.text = car.transmission
 //        holder.fuelText.text = car.fuelType
 

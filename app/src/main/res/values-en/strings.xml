@@ -100,4 +100,5 @@
     <string name="text_google">Google</string>
     <string name="text_your_gmail">ivanov@gmail.com</string>
     <string name="text_logout_from_profile">Logout from profile</string>
+    <string name="error_driver_license_already_used">This driver license already used</string>
 </resources>

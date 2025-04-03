@@ -38,7 +38,6 @@ class ProfileFragment : Fragment() {
 
     private fun loadUserData() {
         lifecycleScope.launch {
-            // Получаем текущего пользователя (например, по email)
             val sharedPreferences = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
             val currentUserEmail = sharedPreferences.getString("current_user_email", null)
 

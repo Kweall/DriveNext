@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.kweallapp.viewmodel.SignUpViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -65,12 +66,14 @@ class SignUp3Activity : BaseActivity() {
         }
 
         binding.buttonContinue.setOnClickListener {
-            isFormSubmitted = true
-            if (validateForm()) {
-                saveDataToViewModel()
-                saveUserToDatabase()
+            lifecycleScope.launch {
+                isFormSubmitted = true
+                if (validateForm()) {
+                    saveDataToViewModel()
+                    saveUserToDatabase()
+                    startActivity(Intent(this@SignUp3Activity, CongratulationsActivity::class.java))
+                }
             }
-            startActivity(Intent(this, CongratulationsActivity::class.java))
         }
 
         binding.imageView5.setOnClickListener {
@@ -162,13 +165,15 @@ class SignUp3Activity : BaseActivity() {
     }
 
     private fun checkButtonState() {
-        val isFormValid = validateForm()
-        val arePhotosLoaded = isPhoto1Loaded && isPhoto2Loaded
+        lifecycleScope.launch {
+            val isFormValid = validateForm()
+            val arePhotosLoaded = isPhoto1Loaded && isPhoto2Loaded
 
-        if (isFormValid && arePhotosLoaded) {
-            binding.buttonContinue.isEnabled = true
-        } else {
-            binding.buttonContinue.isEnabled = false
+            if (isFormValid && arePhotosLoaded) {
+                binding.buttonContinue.isEnabled = true
+            } else {
+                binding.buttonContinue.isEnabled = false
+            }
         }
     }
 
@@ -271,7 +276,7 @@ class SignUp3Activity : BaseActivity() {
         }
     }
 
-    private fun validateForm(): Boolean {
+    private suspend fun validateForm(): Boolean {
         isFormSubmitted = true
 
         if (!validateDriverLicense()) {
@@ -315,7 +320,7 @@ class SignUp3Activity : BaseActivity() {
     }
 
 
-    private fun validateDriverLicense(): Boolean {
+    private suspend fun validateDriverLicense(): Boolean {
         val driverLicense = binding.editText.text.toString()
 
         if (driverLicense.isEmpty()) {
@@ -332,6 +337,17 @@ class SignUp3Activity : BaseActivity() {
             Toast.makeText(
                 this,
                 getString(R.string.error_driver_license_length),
+                Toast.LENGTH_LONG
+            ).show()
+            return false
+        }
+
+        // Проверка на уникальность номера водительского удостоверения
+        val isDriverLicenseExists = viewModel.checkIfDriverLicenseExists(driverLicense)
+        if (isDriverLicenseExists) {
+            Toast.makeText(
+                this,
+                getString(R.string.error_driver_license_already_used),
                 Toast.LENGTH_LONG
             ).show()
             return false
@@ -377,11 +393,13 @@ class SignUp3Activity : BaseActivity() {
 
     private fun setupButton() {
         binding.buttonContinue.setOnClickListener {
-            isFormSubmitted = true
-            if (validateForm()) {
-                saveDataToViewModel()
-                saveUserToDatabase()
-                startActivity(Intent(this, CongratulationsActivity::class.java))
+            lifecycleScope.launch {
+                isFormSubmitted = true
+                if (validateForm()) {
+                    saveDataToViewModel()
+                    saveUserToDatabase()
+                    startActivity(Intent(this@SignUp3Activity, CongratulationsActivity::class.java))
+                }
             }
         }
     }

@@ -59,15 +59,7 @@ class SignUpViewModel(private val userDao: UserDao) : ViewModel() {
         return userDao.getUserByEmail(email) != null
     }
 
-    class SignUpViewModelFactory(
-        private val userDao: UserDao
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return SignUpViewModel.getInstance(userDao) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
+    suspend fun checkIfDriverLicenseExists(driverLicense: String): Boolean {
+        return userDao.checkIfDriverLicenseExists(driverLicense)
     }
 }
